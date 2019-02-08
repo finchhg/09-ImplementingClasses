@@ -14,9 +14,9 @@ def main():
     run_test_clone()
     run_test_move_to()
     run_test_move_by()
-    # run_test_get_number_of_moves_made()
-    # run_test_get_distance_from()
-    # run_test_get_distance_from_start()
+    run_test_get_number_of_moves_made()
+    run_test_get_distance_from()
+    run_test_get_distance_from_start()
     # run_test_get_distance_traveled()
     # run_test_closer_to()
     # run_test_halfway_to()
@@ -51,6 +51,8 @@ class Point(object):
         self.x = x
         self.y = y
         self.moves = 0
+        self.startx = x
+        self.starty = y
 
     def __repr__(self):
         value = 'Point(' + str(self.x) + ',' + str(self.y) + ')'
@@ -62,11 +64,29 @@ class Point(object):
     def move_to(self, x, y):
         self.x = x
         self.y = y
+        self.moves = self.moves +1
 
     def move_by(self, dx, dy):
         self.x = self.x + dx
         self.y = self.y + dy
         self.moves = self.moves + 1
+
+    def get_number_of_moves_made(self,):
+        return self.moves
+
+    def get_distance_from(self, Point2):
+        x = (self.x - Point2.x) ** 2
+        y = (self.y - Point2.y) ** 2
+        hypotenuse = (x + y) ** 0.5
+        return hypotenuse
+
+    def get_distance_from_start(self):
+        x2 = (self.startx - self.x) ** 2
+        y2 = (self.starty - self.y) ** 2
+        distance = (x2 + y2) ** 0.5
+        return distance
+
+
 
 
 
@@ -603,15 +623,66 @@ def run_test_get_number_of_moves_made():
         print('Actual for p2 moves made:  ', p2.get_number_of_moves_made())
     """
     # -------------------------------------------------------------------------
-    # TODO: 8.  Follow the same instructions as in _TODO_ 3 above,
+    # done: 8.  Follow the same instructions as in _TODO_ 3 above,
     #    but for the  get_number_of_moves_made  method specified above.
-    # TODO (continued):  HINT: What must a Point REMEMBER for this method?
+    # done (continued):  HINT: What must a Point REMEMBER for this method?
     # -------------------------------------------------------------------------
     print()
     print('-----------------------------------------------------------')
     print('Testing the   get_number_of_moves_made   method')
     print('of the Point class.')
     print('-----------------------------------------------------------')
+
+    p1 = Point(10, 8)
+    p2 = Point(50, 20)
+    print()
+    print('Expected for p1 moves made: 0')
+    print('Actual for p1 moves made:  ', p1.get_number_of_moves_made())
+    print('Expected for p2 moves made: 0')
+    print('Actual for p2 moves made:  ', p2.get_number_of_moves_made())
+
+    p1.move_by(5, -1)
+    p2.move_by(0, 0)
+    print()
+    print('Expected for p1 moves made: 1')
+    print('Actual for p1 moves made:  ', p1.get_number_of_moves_made())
+    print('Expected for p2 moves made: 1')
+    print('Actual for p2 moves made:  ', p2.get_number_of_moves_made())
+
+    p2.move_by(200, 0)
+    p2.move_by(-100, 300)
+    p2.move_to(-100, 300)
+    p1.move_to(3, 3)
+    print()
+    print('Expected for p1 moves made: 2')
+    print('Actual for p1 moves made:  ', p1.get_number_of_moves_made())
+    print('Expected for p2 moves made: 4')
+    print('Actual for p2 moves made:  ', p2.get_number_of_moves_made())
+
+    p1.move_by(200, 0)
+    p1.move_by(-100, 300)
+    p1.move_to(-100, 300)
+    p1.move_to(3, 3)
+    print()
+    print('Expected for p1 moves made: 6')
+    print('Actual for p1 moves made:  ', p1.get_number_of_moves_made())
+    print('Expected for p2 moves made: 4')
+    print('Actual for p2 moves made:  ', p2.get_number_of_moves_made())
+
+    p1.x = 400
+    print()
+    print('Expected for p1 moves made: 6')
+    print('Actual for p1 moves made:  ', p1.get_number_of_moves_made())
+    print('Expected for p2 moves made: 4')
+    print('Actual for p2 moves made:  ', p2.get_number_of_moves_made())
+
+    p1.move_to(3, 3)
+    p2.move_by(0, 0)
+    print()
+    print('Expected for p1 moves made: 7')
+    print('Actual for p1 moves made:  ', p1.get_number_of_moves_made())
+    print('Expected for p2 moves made: 5')
+    print('Actual for p2 moves made:  ', p2.get_number_of_moves_made())
 
 
 def run_test_get_distance_from():
@@ -670,13 +741,54 @@ def run_test_get_distance_from():
         print('Actual   p2 to p4:', p2.get_distance_from(p4))
     """
     # -------------------------------------------------------------------------
-    # TODO: 9.  Follow the same instructions as in _TODO_ 3 above,
+    # done: 9.  Follow the same instructions as in _TODO_ 3 above,
     #    but for the  get_distance_from  method specified above.
     # -------------------------------------------------------------------------
     print()
     print('-----------------------------------------------------------')
     print('Testing the  get_distance_from  method of the Point class.')
     print('-----------------------------------------------------------')
+
+    p1 = Point(1, 5)
+    p2 = Point(10, 5)
+    p3 = Point(13, 9)
+
+    print()
+    print('Expected p1 to p2: 9.0')
+    print('Actual   p1 to p2:', p1.get_distance_from(p2))
+
+    print()
+    print('Expected p2 to p3: 5.0')
+    print('Actual   p2 to p3:', p2.get_distance_from(p3))
+    print('Expected p3 to p2: 5.0')
+    print('Actual   p3 to p2:', p3.get_distance_from(p2))
+
+    print()
+    print('Expected p1 to p3: about 12.65')
+    print('Actual   p1 to p3:', p1.get_distance_from(p3))
+    print('Expected p3 to p1: about 12.65')
+    print('Actual   p3 to p1:', p3.get_distance_from(p1))
+
+    print()
+    print('Expected p1 to p1: 0.0')
+    print('Actual   p1 to p1:', p1.get_distance_from(p1))
+    print('Expected p2 to p2: 0.0')
+    print('Actual   p2 to p2:', p2.get_distance_from(p2))
+    print('Expected p3 to p3: 0.0')
+    print('Actual   p3 to p3:', p3.get_distance_from(p3))
+
+    p4 = p1.clone()
+    print()
+    print('Expected p1 to p4: 0.0')
+    print('Actual   p1 to p4:', p1.get_distance_from(p4))
+    print('Expected p4 to p1: 0.0')
+    print('Actual   p4 to p1:', p4.get_distance_from(p1))
+    print('Expected p4 to p2: 9.0')
+    print('Actual   p4 to p2:', p4.get_distance_from(p2))
+    print('Expected p2 to p4: 9.0')
+    print('Actual   p2 to p4:', p2.get_distance_from(p4))
+
+
 
 
 def run_test_get_distance_from_start():
@@ -726,7 +838,7 @@ def run_test_get_distance_from_start():
         print('Actually is:', p2.get_distance_from_start())
     """
     # -------------------------------------------------------------------------
-    # TODO: 10.  Follow the same instructions as in _TODO_ 3 above,
+    # done: 10.  Follow the same instructions as in _TODO_ 3 above,
     #    but for the  get_distance_from_START  method specified above.
     # -------------------------------------------------------------------------
     print()
@@ -734,6 +846,36 @@ def run_test_get_distance_from_start():
     print('Testing the   get_distance_from_START   method')
     print('of the Point class.')
     print('-----------------------------------------------------------')
+
+    p1 = Point(20, 30)
+    p1.move_to(111, 222)
+    p1.move_by(10, 20)
+    p1.move_to(0, 0)
+    p1.move_to(21, 31)
+    print()
+    print('p1 from start to (21, 31), should be about 1.414')
+    print('Actually is:', p1.get_distance_from_start())
+
+    p1.move_by(29, 39)
+    print()
+    print('p1 from start to (50, 70), should be about 50.0')
+    print('Actually is:', p1.get_distance_from_start())
+
+    p2 = Point(1, 1)
+    print()
+    print('p2 from start to (1, 1), should be about 0.0')
+    print('Actually is:', p2.get_distance_from_start())
+
+    p2.move_to(11, 1)
+    print()
+    print('p2 from start to (11, 1), should be about 10.0')
+    print('Actually is:', p2.get_distance_from_start())
+
+    p2.move_to(999, 999)
+    p2.move_to(1, 1)
+    print()
+    print('p2 from start to (1, 1), should be about 0.0')
+    print('Actually is:', p2.get_distance_from_start())
 
 
 def run_test_get_distance_traveled():
